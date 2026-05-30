@@ -1,0 +1,8 @@
+{
+  "passed": false,
+  "steps": [
+    { "label": "Navigate to the app", "action": "navigate", "passed": true },
+    { "label": "Click a non-existent button", "action": "click", "target": "#missing", "passed": false }
+  ],
+  "rawOutput": "Error: element not found"
+}

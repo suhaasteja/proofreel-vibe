@@ -1,0 +1,4 @@
+Navigate to http://localhost:3456
+Type "Test Item" in the item name input field
+Click the Add button
+Verify that "Test Item" appears in the items list

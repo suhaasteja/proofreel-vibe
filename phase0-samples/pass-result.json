@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "steps": [
+    { "label": "Navigate to the app", "action": "navigate" },
+    { "label": "Type 'Test Item' in the input field", "action": "type", "target": "#new-item" },
+    { "label": "Click the Add button", "action": "click", "target": "#add-btn" },
+    { "label": "Verify 'Test Item' appears in the list", "action": "assert" }
+  ],
+  "rawOutput": ""
+}

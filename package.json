@@ -1,0 +1,25 @@
+{
+  "name": "proofreel-vibe",
+  "version": "0.1.0",
+  "description": "Proof-of-work demos for any repo. Verify first, record second.",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "toy-app",
+    "kane-runner",
+    "flow-compiler",
+    "recorder",
+    "post",
+    "readme-injector",
+    "web-ui"
+  ],
+  "scripts": {
+    "start": "node proofreel.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}

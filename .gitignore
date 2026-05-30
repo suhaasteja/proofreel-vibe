@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.webm
+*.mp4
+*.gif
+.proofreel/
+.repos/
+.env
+proofreel-toy-app/

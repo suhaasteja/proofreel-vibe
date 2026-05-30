@@ -1,0 +1,13 @@
+{
+  "name": "Kane Verify on Save",
+  "version": "1.0.0",
+  "description": "Fires Kane CLI against the ProofReel web UI on every save. On failure, Kiro reads the trace and fixes the code. On pass, the recorder renders the green run.",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["web-ui/**/*.js", "web-ui/**/*.html", "web-ui/**/*.css"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A file in the web-ui was saved. Run Kane CLI to verify the ProofReel web UI is working correctly by testing its primary flow (create a job, see it complete). If Kane fails, read the trace output and fix the broken code. If Kane passes, note that the verified flow is ready for recording."
+  }
+}

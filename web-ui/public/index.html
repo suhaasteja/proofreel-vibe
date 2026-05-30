@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProofReel — Verify First, Record Second</title>
+  <style>
+    :root {
+      --bg: #0f0f1a;
+      --surface: #1a1a2e;
+      --surface-hover: #222240;
+      --primary: #4361ee;
+      --primary-hover: #3a56d4;
+      --success: #06d6a0;
+      --danger: #ef233c;
+      --warning: #f8961e;
+      --text: #e8e8f0;
+      --text-muted: #8888aa;
+      --border: #2a2a4a;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; }
+
+    header { text-align: center; margin-bottom: 48px; }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--success));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .tagline { color: var(--text-muted); font-size: 1.1rem; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .card h2 { font-size: 1.2rem; margin-bottom: 16px; color: var(--text); }
+
+    .form-group { margin-bottom: 16px; }
+
+    label {
+      display: block; font-size: 0.85rem; color: var(--text-muted);
+      margin-bottom: 6px; font-weight: 500;
+    }
+
+    input[type="text"], input[type="url"], input[type="number"] {
+      width: 100%; padding: 12px 16px; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 6px;
+      color: var(--text); font-size: 15px; outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus { border-color: var(--primary); }
+    input::placeholder { color: var(--text-muted); }
+
+    .form-row { display: flex; gap: 12px; }
+    .form-row .form-group { flex: 1; }
+
+    .btn {
+      padding: 12px 24px; border: none; border-radius: 6px;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; width: 100%;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .jobs-list { list-style: none; }
+
+    .job-item {
+      padding: 16px 20px; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 8px;
+      margin-bottom: 10px; transition: border-color 0.2s;
+    }
+
+    .job-item:hover { border-color: var(--primary); }
+
+    .job-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .job-info { flex: 1; }
+    .job-repo { font-weight: 600; font-size: 15px; }
+    .job-feature { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+    .job-status {
+      padding: 4px 12px; border-radius: 20px; font-size: 12px;
+      font-weight: 600; text-transform: uppercase; white-space: nowrap;
+    }
+
+    .status-pending { background: rgba(248, 150, 30, 0.15); color: var(--warning); }
+    .status-cloning, .status-installing, .status-booting { background: rgba(67, 97, 238, 0.15); color: var(--primary); }
+    .status-compiling, .status-recording, .status-converting { background: rgba(67, 97, 238, 0.15); color: var(--primary); }
+    .status-verifying { background: rgba(248, 150, 30, 0.15); color: var(--warning); }
+    .status-completed { background: rgba(6, 214, 160, 0.15); color: var(--success); }
+    .status-failed { background: rgba(239, 35, 60, 0.15); color: var(--danger); }
+
+    .job-logs {
+      margin-top: 8px; padding: 10px 12px; background: rgba(0,0,0,0.3);
+      border-radius: 6px; font-family: 'SF Mono', monospace; font-size: 12px;
+      color: var(--text-muted); max-height: 120px; overflow-y: auto;
+      line-height: 1.6;
+    }
+
+    .job-gif {
+      margin-top: 12px; border-radius: 8px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .job-gif img {
+      width: 100%; display: block;
+    }
+
+    .empty-state {
+      text-align: center; padding: 40px; color: var(--text-muted);
+    }
+
+    .pipeline-viz {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; margin: 24px 0; flex-wrap: wrap;
+    }
+
+    .pipeline-step {
+      padding: 8px 14px; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 6px;
+      font-size: 13px; font-weight: 500;
+    }
+
+    .pipeline-arrow { color: var(--text-muted); font-size: 18px; }
+
+    footer {
+      text-align: center; margin-top: 48px;
+      color: var(--text-muted); font-size: 13px;
+    }
+
+    .hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    .toggle-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .toggle-option {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 10px 14px; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 6px; cursor: pointer; flex: 1; min-width: 200px;
+    }
+    .toggle-option:has(input:checked) { border-color: var(--primary); background: rgba(67,97,238,0.05); }
+    .toggle-option input { margin-top: 3px; }
+    .toggle-option span:nth-child(2) { font-weight: 600; font-size: 14px; display: block; }
+    .toggle-option .hint { margin-top: 2px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎬 ProofReel</h1>
+      <p class="tagline">Paste a GitHub repo. We verify its features, then record a demo GIF — only for what actually works.</p>
+    </header>
+
+    <div class="pipeline-viz">
+      <span class="pipeline-step">📦 Clone</span>
+      <span class="pipeline-arrow">→</span>
+      <span class="pipeline-step">🚀 Boot</span>
+      <span class="pipeline-arrow">→</span>
+      <span class="pipeline-step">📝 Compile Flow</span>
+      <span class="pipeline-arrow">→</span>
+      <span class="pipeline-step">🔍 Verify</span>
+      <span class="pipeline-arrow">→</span>
+      <span class="pipeline-step">🎥 Record</span>
+      <span class="pipeline-arrow">→</span>
+      <span class="pipeline-step">🖼️ GIF</span>
+    </div>
+
+    <div class="card">
+      <h2>Generate Demo</h2>
+      <div class="form-group">
+        <label for="repo-url">GitHub Repository URL</label>
+        <input type="url" id="repo-url" placeholder="https://github.com/user/repo" value="">
+        <p class="hint">Paste any public GitHub repo URL. We'll clone it, install deps, and boot it.</p>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="feature">Feature to Demo</label>
+          <input type="text" id="feature" placeholder="e.g. Todo, CRUD, Auth" value="Todo">
+        </div>
+        <div class="form-group">
+          <label for="port">App Port</label>
+          <input type="number" id="port" placeholder="3000" value="3000">
+          <p class="hint">Port the app serves on</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Recording Mode</label>
+        <div class="toggle-row">
+          <label class="toggle-option">
+            <input type="radio" name="mode" value="standard" checked>
+            <span>Standard</span>
+            <span class="hint">Kane verifies → Playwright re-records (cursor visible)</span>
+          </label>
+          <label class="toggle-option">
+            <input type="radio" name="mode" value="single-run">
+            <span>Single-Run</span>
+            <span class="hint">Kane verifies + records simultaneously (faster, no cursor)</span>
+          </label>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="generate-btn">🚀 Verify & Generate Demo</button>
+    </div>
+
+    <div class="card">
+      <h2>Jobs</h2>
+      <ul class="jobs-list" id="jobs-list">
+        <li class="empty-state">No jobs yet. Paste a repo URL above to get started.</li>
+      </ul>
+    </div>
+
+    <footer>
+      <p>ProofReel — A GIF is never produced for a flow that did not pass verification.</p>
+    </footer>
+  </div>
+
+  <script>
+    const generateBtn = document.getElementById('generate-btn');
+    const jobsList = document.getElementById('jobs-list');
+    let jobs = [];
+
+    generateBtn.addEventListener('click', async () => {
+      const repoUrl = document.getElementById('repo-url').value.trim();
+      const feature = document.getElementById('feature').value.trim();
+      const port = parseInt(document.getElementById('port').value) || 3000;
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+
+      if (!repoUrl) { alert('Please enter a GitHub repo URL'); return; }
+
+      generateBtn.disabled = true;
+      generateBtn.textContent = '⏳ Starting...';
+
+      try {
+        const res = await fetch('/api/jobs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ repoUrl, feature, port, mode })
+        });
+        const job = await res.json();
+        jobs.unshift(job);
+        renderJobs();
+        pollJob(job.id);
+      } catch (err) {
+        console.error('Failed to create job:', err);
+        alert('Failed to create job');
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = '🚀 Verify & Generate Demo';
+      }
+    });
+
+    function renderJobs() {
+      if (jobs.length === 0) {
+        jobsList.innerHTML = '<li class="empty-state">No jobs yet. Paste a repo URL above to get started.</li>';
+        return;
+      }
+      jobsList.innerHTML = jobs.map(job => `
+        <li class="job-item">
+          <div class="job-header">
+            <div class="job-info">
+              <div class="job-repo">${escapeHtml(job.repoUrl)}</div>
+              <div class="job-feature">Feature: ${escapeHtml(job.feature)} · Port: ${job.port}</div>
+            </div>
+            <span class="job-status status-${job.status}">${job.status}</span>
+          </div>
+          ${job.logs && job.logs.length > 0 ? `
+            <div class="job-logs">${job.logs.map(l => escapeHtml(l)).join('<br>')}</div>
+          ` : ''}
+          ${job.gifUrl && job.status === 'completed' ? `
+            <div class="job-gif"><img src="${job.gifUrl}" alt="${job.feature} demo"></div>
+          ` : ''}
+        </li>
+      `).join('');
+    }
+
+    async function pollJob(id) {
+      const interval = setInterval(async () => {
+        try {
+          const res = await fetch(`/api/jobs/${id}`);
+          const job = await res.json();
+          const idx = jobs.findIndex(j => j.id === id);
+          if (idx !== -1) jobs[idx] = job;
+          renderJobs();
+          if (job.status === 'completed' || job.status === 'failed') {
+            clearInterval(interval);
+          }
+        } catch { clearInterval(interval); }
+      }, 1500);
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // Load existing jobs
+    fetch('/api/jobs').then(r => r.json()).then(data => {
+      jobs = data;
+      renderJobs();
+    });
+  </script>
+</body>
+</html>
