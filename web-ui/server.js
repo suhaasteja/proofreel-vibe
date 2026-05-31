@@ -154,8 +154,8 @@ async function processJob(job) {
     if (fs.existsSync(pkgPath)) {
       const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
       if (pkg.scripts) {
-        if (pkg.scripts.dev) startCmd = 'npm run dev';
-        else if (pkg.scripts.start) startCmd = 'npm start';
+        if (pkg.scripts.start) startCmd = 'npm start';
+        else if (pkg.scripts.dev) startCmd = 'npm run dev';
         else if (pkg.scripts.serve) startCmd = 'npm run serve';
       }
     }
